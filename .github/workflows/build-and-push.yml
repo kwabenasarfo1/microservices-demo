@@ -60,7 +60,7 @@ jobs:
         run: |
           cd ${{ matrix.service }}
           IMAGE_NAME=${{ env.ACR_NAME }}.azurecr.io/${{ matrix.service }}
-          docker build -t $IMAGE_NAME:latest .
+          docker build -t $IMAGE_NAME:latest -f Dockerfile .
           docker push $IMAGE_NAME:latest
 
       - name: Azure CLI logout
