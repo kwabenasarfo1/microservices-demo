@@ -33,7 +33,6 @@ jobs:
           - src/recommendationservice
           - src/shippingservice
           - src/shoppingassistantservice
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -60,7 +59,7 @@ jobs:
       - name: Build and push Docker image
         run: |
           IMAGE_NAME=${{ env.ACR_NAME }}.azurecr.io/$(basename ${{ matrix.service }})
-          docker build -t $IMAGE_NAME:latest -f ${{ matrix.service }}/Dockerfile ${{ matrix.service }}
+          docker build -t $IMAGE_NAME:latest -f ${{ matrix.service }}/Dockerfile . # Build from the root of the repository
           docker push $IMAGE_NAME:latest
 
       - name: Azure CLI logout
