@@ -17,6 +17,7 @@ env:
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
+    timeout-minutes: 60  # Set timeout to 60 minutes
     strategy:
       matrix:
         service:
@@ -58,7 +59,7 @@ jobs:
 
       - name: Build and push Docker image
         run: |
-          cd ${{ matrix.service }}
+          cd ${{ matrix.service }}  # Navigate to the service directory
           IMAGE_NAME=${{ env.ACR_NAME }}.azurecr.io/${{ matrix.service }}
           docker build -t $IMAGE_NAME:latest -f Dockerfile .
           docker push $IMAGE_NAME:latest
