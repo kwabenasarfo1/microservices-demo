@@ -59,6 +59,12 @@ jobs:
       - name: Build and push Docker image
         run: |
           cd ${{ matrix.service }}
+          # Check if Dockerfile exists
+          if [ ! -f "Dockerfile" ]; then
+            echo "Error: Dockerfile not found in ${{ matrix.service }}"
+            exit 1
+          fi
+
           IMAGE_NAME=${{ env.ACR_NAME }}.azurecr.io/$(basename ${{ matrix.service }})
           docker build -t $IMAGE_NAME:latest .
           docker push $IMAGE_NAME:latest
