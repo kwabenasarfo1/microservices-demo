@@ -22,7 +22,7 @@ jobs:
       matrix:
         service:
           - src/adservice
-          - src/cartservice/src
+          - src/cartservice/src 
           - src/checkoutservice
           - src/currencyservice
           - src/emailservice
@@ -65,7 +65,13 @@ jobs:
             exit 1
           fi
 
-          IMAGE_NAME=${{ env.ACR_NAME }}.azurecr.io/$(basename ${{ matrix.service }})
+          # Special handling for cartservice image name
+          if [ "${{ matrix.service }}" == "src/cartservice/src" ]; then
+            IMAGE_NAME=${{ env.ACR_NAME }}.azurecr.io/cartservice
+          else
+            IMAGE_NAME=${{ env.ACR_NAME }}.azurecr.io/$(basename ${{ matrix.service }})
+          fi
+
           docker build -t $IMAGE_NAME:latest .
           docker push $IMAGE_NAME:latest
 
