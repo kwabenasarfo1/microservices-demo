@@ -22,7 +22,7 @@ jobs:
       matrix:
         service:
           - src/adservice
-          - src/cartservice
+          - src/cartservice/src
           - src/checkoutservice
           - src/currencyservice
           - src/emailservice
