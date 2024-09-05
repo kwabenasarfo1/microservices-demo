@@ -281,7 +281,7 @@ jobs:
           az aks get-credentials --resource-group ${{ env.RESOURCE_GROUP_NAME }} --name ${{ env.AKS_CLUSTER_NAME }}
 
       - name: Deploy to AKS
-        uses: ./.github/workflows/deploy-to-aks.yml # Use the separate deployment workflow
+        uses: ./github/workflows/deploy-to-aks.yml # Use the separate deployment workflow
         with:
           images: "${{ needs.build-and-push.outputs.images }}" 
 
