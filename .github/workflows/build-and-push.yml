@@ -53,14 +53,7 @@ jobs:
           client-id: ${{ secrets.AZURE_CLIENT_ID }}
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-          
-          # ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
-          # ARM_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
-          # ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-          # ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
-          # audience: api://AzureADTokenExchange
-
-
+                    
       - name: Log in to Azure Container Registry
         run: |
           az acr login --name ${{ env.ACR_NAME }}
@@ -142,7 +135,8 @@ jobs:
           az aks get-credentials --resource-group ${{ env.RESOURCE_GROUP_NAME }} --name ${{ env.AKS_CLUSTER_NAME }}
 
       - name: Deploy to AKS
-        uses: ./.github/workflows/deploy-to-aks.yml # Use the separate deployment workflow
+        #uses: ./.github/workflows/deploy-to-aks.yml # Use the separate deployment workflow
+        uses: deploy-to-aks.yml
         with:
           images: "${{ needs.build-and-push.outputs.images }}" 
 
