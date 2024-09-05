@@ -708,16 +708,14 @@ jobs:
           IFS=',' read -ra ADDR <<< "$images"
           for service in "${ADDR[@]}"; do
             echo "Deploying $service"
-            if [ -f "../manifests/$service.yaml" ]; then
-              kubectl apply -f ../manifests/$service.yaml
-              kubectl set image deployment/$service server=$service:latest --namespace default
+            if [ -f "kubernetes-manifests/$service.yaml" ]; then
+              kubectl apply -f kubernetes-manifests/$service.yaml
+              kubectl set image deployment/$service server=${{ env.ACR_NAME }}.azurecr.io/$service:latest --namespace ${{ env.AKS_NAMESPACE }}
               echo "Deployed $service"
             else
               echo "Skipping $service, manifest not found."
             fi
           done
-
-
         env:
           AKS_NAMESPACE: 'default'
 
