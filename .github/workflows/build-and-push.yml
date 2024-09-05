@@ -597,7 +597,7 @@ jobs:
           - src/productcatalogservice
           - src/recommendationservice
           - src/shippingservice
-          - src/shoppingassistantservice
+          #- src/shoppingassistantservice
     outputs:
       images: ${{ steps.set-images-output.outputs.images }} # Output the built images
     steps:
