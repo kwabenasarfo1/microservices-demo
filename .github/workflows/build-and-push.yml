@@ -693,15 +693,31 @@ jobs:
           AKS_CLUSTER_NAME: 'microservices-demo-aks'
 
       - name: Deploy to AKS
+        # run: |
+        #   images="${{ needs.build-and-push.outputs.images }}"
+        #   IFS=',' read -ra ADDR <<< "$images"
+        #   for service in "${ADDR[@]}"; do
+        #     echo "Deploying $service"
+        #     kubectl apply -f kubernetes-manifests/$service.yaml 
+        #     kubectl set image deployment/$service server=$service:latest --namespace ${{ env.AKS_NAMESPACE }}
+        #     echo "Deployed $service"
+        #   done
+
         run: |
           images="${{ needs.build-and-push.outputs.images }}"
           IFS=',' read -ra ADDR <<< "$images"
           for service in "${ADDR[@]}"; do
             echo "Deploying $service"
-            kubectl apply -f kubernetes-manifests/$service.yaml 
-            kubectl set image deployment/$service server=$service:latest --namespace ${{ env.AKS_NAMESPACE }}
-            echo "Deployed $service"
+            if [ -f "../manifests/$service.yaml" ]; then
+              kubectl apply -f ../manifests/$service.yaml
+              kubectl set image deployment/$service server=$service:latest --namespace default
+              echo "Deployed $service"
+            else
+              echo "Skipping $service, manifest not found."
+            fi
           done
+
+
         env:
           AKS_NAMESPACE: 'default'
 
