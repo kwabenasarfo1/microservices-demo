@@ -688,6 +688,9 @@ jobs:
       - name: Get AKS Credentials (if needed for private ACR)
         run: |
           az aks get-credentials --resource-group ${{ env.RESOURCE_GROUP_NAME }} --name ${{ env.AKS_CLUSTER_NAME }}
+        env:
+          RESOURCE_GROUP_NAME: 'microservices-demo-rg'
+          AKS_CLUSTER_NAME: 'microservices-demo-aks'
 
       - name: Deploy to AKS
         run: |
@@ -697,7 +700,9 @@ jobs:
             kubectl set image deployment/$service server=$service:latest --namespace ${{ env.AKS_NAMESPACE }}
             echo "Deployed $service"
           done
-
+        env:
+          AKS_NAMESPACE: 'default'
+          
       - name: Azure CLI logout
         run: |
           az logout
