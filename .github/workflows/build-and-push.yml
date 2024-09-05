@@ -430,7 +430,7 @@ jobs:
           az aks get-credentials --resource-group ${{ env.RESOURCE_GROUP_NAME }} --name ${{ env.AKS_CLUSTER_NAME }}
 
       - name: Deploy to AKS
-        uses: ./.github/workflows/deploy-to-aks.yml # Use the reusable deployment workflow
+        uses: kwabenasarfo1/microservices-demo/.github/workflows/deploy-to-aks.yml@main # Use the reusable deployment workflow
         with:
           images: "${{ env.images }}"  # Pass the concatenated image names
           RESOURCE_GROUP_NAME: ${{ env.RESOURCE_GROUP_NAME }}
