@@ -715,7 +715,7 @@ jobs:
             else
               echo "Skipping $service, manifest not found."
             fi
-          done
+          done 
         env:
           AKS_NAMESPACE: 'default'
 
