@@ -76,9 +76,17 @@ on:
         required: true
       AZURE_SUBSCRIPTION_ID:
         required: true
-
-env:
-  AKS_NAMESPACE: 'default' # Replace if you use a different namespace
+    environment:
+      RESOURCE_GROUP_NAME:
+        required: true
+      AKS_CLUSTER_NAME:
+        required: true
+      AKS_NAMESPACE:
+        required: true
+      ACR_NAME:
+        required: true
+      AZURE_REGION:
+        required: true
 
 jobs:
   deploy:
@@ -110,14 +118,25 @@ jobs:
         run: |
           az aks install-cli
 
+      # - name: Deploy each image
+      #   run: |
+      #     for service in ${{ inputs.images }}; do
+      #       echo "Deploying $service"
+      #       kubectl apply -f kubernetes-manifests/$service.yaml 
+      #       kubectl set image deployment/$service server=$service:latest --namespace ${{ env.AKS_NAMESPACE }}
+      #       echo "Deployed $service"
+      #     done
+      
+
       - name: Deploy each image
         run: |
           for service in ${{ inputs.images }}; do
             echo "Deploying $service"
             kubectl apply -f kubernetes-manifests/$service.yaml 
-            kubectl set image deployment/$service server=$service:latest --namespace ${{ env.AKS_NAMESPACE }}
+            kubectl set image deployment/$service server=${{ env.ACR_NAME }}.azurecr.io/$service:latest --namespace ${{ env.AKS_NAMESPACE }}
             echo "Deployed $service"
           done
+
 
       - name: Azure CLI logout
         run: |
