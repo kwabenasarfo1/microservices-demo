@@ -97,6 +97,7 @@ env:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.head_branch == 'dev-new' }}  # Specify the branch to wait for
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
