@@ -1,64 +1,64 @@
-# name: Deploy to AKS
+name: Deploy to AKS
 
-# on:
-#   workflow_call:
-#     inputs:
-#       images:
-#         required: true
-#         type: string
-#     secrets:
-#       AZURE_CLIENT_ID:
-#         required: true
-#       AZURE_TENANT_ID:
-#         required: true
-#       AZURE_SUBSCRIPTION_ID:
-#         required: true
+on:
+  workflow_call:
+    inputs:
+      images:
+        required: true
+        type: string
+    secrets:
+      AZURE_CLIENT_ID:
+        required: true
+      AZURE_TENANT_ID:
+        required: true
+      AZURE_SUBSCRIPTION_ID:
+        required: true
 
-# env:
-#   AKS_NAMESPACE: 'default' # Replace if you use a different namespace
+env:
+  AKS_NAMESPACE: 'default' # Replace if you use a different namespace
 
-# jobs:
-#   deploy:
-#     runs-on: ubuntu-latest
-#     steps:
-#       - name: Checkout code
-#         uses: actions/checkout@v3
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-#       - name: Install Azure CLI
-#         run: |
-#           curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
+      - name: Install Azure CLI
+        run: |
+          curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
 
-#       - name: Verify Azure CLI installation
-#         run: |
-#           az --version
+      - name: Verify Azure CLI installation
+        run: |
+          az --version
 
-#       - name: Log in to Azure
-#         uses: azure/login@v1.4.7
-#         with:
-#           client-id: ${{ secrets.AZURE_CLIENT_ID }}
-#           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-#           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      - name: Log in to Azure
+        uses: azure/login@v1.4.7
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
-#       - name: Get AKS Credentials
-#         run: |
-#           az aks get-credentials --resource-group ${{ env.RESOURCE_GROUP_NAME }} --name ${{ env.AKS_CLUSTER_NAME }}
+      - name: Get AKS Credentials
+        run: |
+          az aks get-credentials --resource-group ${{ env.RESOURCE_GROUP_NAME }} --name ${{ env.AKS_CLUSTER_NAME }}
 
-#       - name: Install kubectl
-#         run: |
-#           az aks install-cli
+      - name: Install kubectl
+        run: |
+          az aks install-cli
 
-#       - name: Deploy each image
-#         run: |
-#           for service in ${{ inputs.images }}; do
-#             echo "Deploying $service"
-#             kubectl apply -f kubernetes-manifests/$service.yaml 
-#             kubectl set image deployment/$service server=$service:latest --namespace ${{ env.AKS_NAMESPACE }}
-#             echo "Deployed $service"
-#           done
+      - name: Deploy each image
+        run: |
+          for service in ${{ inputs.images }}; do
+            echo "Deploying $service"
+            kubectl apply -f kubernetes-manifests/$service.yaml 
+            kubectl set image deployment/$service server=$service:latest --namespace ${{ env.AKS_NAMESPACE }}
+            echo "Deployed $service"
+          done
 
-#       - name: Azure CLI logout
-#         run: |
-#           az logout
+      - name: Azure CLI logout
+        run: |
+          az logout
 
 
 # name: Deploy to AKS
@@ -224,72 +224,72 @@
 #           az logout
 
 
-name: Deploy to AKS
+# name: Deploy to AKS
 
-on:
-  workflow_call:
-    inputs:
-      images:
-        required: true
-        type: string
-    secrets:
-      AZURE_CLIENT_ID:
-        required: true
-      AZURE_TENANT_ID:
-        required: true
-      AZURE_SUBSCRIPTION_ID:
-        required: true
-    environment:
-      RESOURCE_GROUP_NAME:
-        required: true
-      AKS_CLUSTER_NAME:
-        required: true
-      AKS_NAMESPACE:
-        required: true
-      ACR_NAME:
-        required: true
-      AZURE_REGION:
-        required: true
+# on:
+#   workflow_call:
+#     inputs:
+#       images:
+#         required: true
+#         type: string
+#     secrets:
+#       AZURE_CLIENT_ID:
+#         required: true
+#       AZURE_TENANT_ID:
+#         required: true
+#       AZURE_SUBSCRIPTION_ID:
+#         required: true
+#     environment:
+#       RESOURCE_GROUP_NAME:
+#         required: true
+#       AKS_CLUSTER_NAME:
+#         required: true
+#       AKS_NAMESPACE:
+#         required: true
+#       ACR_NAME:
+#         required: true
+#       AZURE_REGION:
+#         required: true
 
-jobs:
-  deploy:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+# jobs:
+#   deploy:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: Checkout code
+#         uses: actions/checkout@v3
 
-      - name: Install Azure CLI
-        run: |
-          curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
+#       - name: Install Azure CLI
+#         run: |
+#           curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
 
-      - name: Verify Azure CLI installation
-        run: |
-          az --version
+#       - name: Verify Azure CLI installation
+#         run: |
+#           az --version
 
-      - name: Log in to Azure
-        uses: azure/login@v1.4.7
-        with:
-          client-id: ${{ secrets.AZURE_CLIENT_ID }}
-          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+#       - name: Log in to Azure
+#         uses: azure/login@v1.4.7
+#         with:
+#           client-id: ${{ secrets.AZURE_CLIENT_ID }}
+#           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+#           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
-      - name: Get AKS Credentials
-        run: |
-          az aks get-credentials --resource-group ${{ env.RESOURCE_GROUP_NAME }} --name ${{ env.AKS_CLUSTER_NAME }}
+#       - name: Get AKS Credentials
+#         run: |
+#           az aks get-credentials --resource-group ${{ env.RESOURCE_GROUP_NAME }} --name ${{ env.AKS_CLUSTER_NAME }}
 
-      - name: Install kubectl
-        run: |
-          az aks install-cli
+#       - name: Install kubectl
+#         run: |
+#           az aks install-cli
 
-      - name: Deploy each image
-        run: |
-          for service in ${{ inputs.images }}; do
-            echo "Deploying $service"
-            kubectl apply -f kubernetes-manifests/$service.yaml 
-            kubectl set image deployment/$service server=${{ env.ACR_NAME }}.azurecr.io/$service:latest --namespace ${{ env.AKS_NAMESPACE }}
-            echo "Deployed $service"
-          done
+#       - name: Deploy each image
+#         run: |
+#           for service in ${{ inputs.images }}; do
+#             echo "Deploying $service"
+#             kubectl apply -f kubernetes-manifests/$service.yaml 
+#             kubectl set image deployment/$service server=${{ env.ACR_NAME }}.azurecr.io/$service:latest --namespace ${{ env.AKS_NAMESPACE }}
+#             echo "Deployed $service"
+#           done
 
-      - name: Azure CLI logout
-        run: |
-          az logout
+#       - name: Azure CLI logout
+#         run: |
+#           az logout
