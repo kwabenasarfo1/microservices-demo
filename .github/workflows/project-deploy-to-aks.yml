@@ -99,6 +99,7 @@ env:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.head_branch == 'dev-new' }}  # Ensure the job only runs for the dev-new branch
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
