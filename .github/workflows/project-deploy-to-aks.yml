@@ -82,7 +82,7 @@ name: Project Deploy to AKS
 
 on:
   workflow_run:
-    workflows: ["Project Build and Push Docker Images"]
+    workflows: [Project Build and Push Docker Images]
     types:
       - completed
 
