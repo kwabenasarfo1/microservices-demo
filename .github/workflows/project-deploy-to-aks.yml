@@ -147,7 +147,8 @@ jobs:
             "shoppingassistantservice"
           )
           for service in "${services[@]}"; do
-            kubectl set image deployment/$service server=${{ env.ACR_NAME }}.azurecr.io/$service:${{ github.event.inputs.image_tag }} --namespace ${{ env.AKS_NAMESPACE }}
+        #   kubectl set image deployment/$service server=${{ env.ACR_NAME }}.azurecr.io/$service:${{ github.event.inputs.image_tag }} --namespace ${{ env.AKS_NAMESPACE }}
+            kubectl set image deployment/$service $service=${{ env.ACR_NAME }}.azurecr.io/$service:${{ github.event.inputs.image_tag }} --namespace ${{ env.AKS_NAMESPACE }}
           done
 
       - name: Azure CLI logout
