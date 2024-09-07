@@ -1,0 +1,60 @@
+Name:             shoppingassistantservice-5dd5f886c8-9drjf
+Namespace:        default
+Priority:         0
+Service Account:  shoppingassistantservice
+Node:             aks-default-41372247-vmss000000/10.224.0.5
+Start Time:       Sat, 07 Sep 2024 12:46:24 +0100
+Labels:           app=shoppingassistantservice
+                  pod-template-hash=5dd5f886c8
+Annotations:      <none>
+Status:           Pending
+IP:               10.244.1.159
+IPs:
+  IP:           10.244.1.159
+Controlled By:  ReplicaSet/shoppingassistantservice-5dd5f886c8
+Containers:
+  server:
+    Container ID:   
+    Image:          aksretailacr.azurecr.io/shoppingassistantservice:
+    Image ID:       
+    Port:           80/TCP
+    Host Port:      0/TCP
+    State:          Waiting
+      Reason:       InvalidImageName
+    Ready:          False
+    Restart Count:  0
+    Limits:
+      cpu:     100m
+      memory:  128Mi
+    Requests:
+      cpu:      50m
+      memory:   32Mi
+    Liveness:   http-get http://:80/ delay=0s timeout=1s period=10s #success=1 #failure=3
+    Readiness:  http-get http://:80/ delay=0s timeout=1s period=10s #success=1 #failure=3
+    Environment:
+      PORT:  80
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-6wcwq (ro)
+Conditions:
+  Type                        Status
+  PodReadyToStartContainers   True 
+  Initialized                 True 
+  Ready                       False 
+  ContainersReady             False 
+  PodScheduled                True 
+Volumes:
+  kube-api-access-6wcwq:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    ConfigMapOptional:       <nil>
+    DownwardAPI:             true
+QoS Class:                   Burstable
+Node-Selectors:              <none>
+Tolerations:                 node.kubernetes.io/memory-pressure:NoSchedule op=Exists
+                             node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type     Reason         Age                  From     Message
+  ----     ------         ----                 ----     -------
+  Warning  InspectFailed  42s (x328 over 70m)  kubelet  Failed to apply default image tag "aksretailacr.azurecr.io/shoppingassistantservice:": couldn't parse image name "aksretailacr.azurecr.io/shoppingassistantservice:": invalid reference format
