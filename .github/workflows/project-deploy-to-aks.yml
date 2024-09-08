@@ -78,144 +78,83 @@
 
 
 
-# name: Project Deploy to AKS
-
-# on:
-#   workflow_run:
-#     workflows: ["Project Build and Push Docker Images"]
-#     types:
-#       - completed
-#     branches:
-#       - dev-new
-
-# permissions:
-#   id-token: write
-#   contents: read
-
-# env:
-#   AKS_NAMESPACE: 'default'
-#   ACR_NAME: 'aksretailacr'
-
-# jobs:
-#   deploy:
-#     runs-on: ubuntu-latest
-#     steps:
-#       - name: Checkout code
-#         uses: actions/checkout@v3
-
-#       - name: Install Azure CLI
-#         run: |
-#           curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
-
-#       - name: Verify Azure CLI installation
-#         run: |
-#           az --version
-
-#       - name: Log in to Azure
-#         uses: azure/login@v1.4.7
-#         with:
-#           client-id: ${{ secrets.AZURE_CLIENT_ID }}
-#           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-#           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-
-#       - name: Get AKS Credentials
-#         run: |
-#           az aks get-credentials --resource-group microservices-demo-rg --name microservices-demo-aks --overwrite-existing
-
-#       - name: Verify kubectl context
-#         run: |
-#           kubectl config current-context
-
-#       - name: Deploy all services
-#         run: |
-#           echo "Deploying all services using release/project-kubernetes-manifests.yaml"
-#           kubectl apply -f release/project-kubernetes-manifests.yaml
-      
-#       - name: Update image tags for each service
-#         run: |
-#           echo "Updating image tags for all services to ${{ github.event.inputs.image_tag }}"
-#           services=(
-#             "currencyservice"
-#             "adservice"
-#             "cartservice"
-#             "checkoutservice"
-#             "emailservice"
-#             "frontend"
-#             "loadgenerator"
-#             "paymentservice"
-#             "productcatalogservice"
-#             "recommendationservice"
-#             "shippingservice"
-#             "shoppingassistantservice"
-#           )
-#           for service in "${services[@]}"; do
-#             kubectl set image deployment/$service server=${{ env.ACR_NAME }}.azurecr.io/$service:${{ github.event.inputs.image_tag }} --namespace ${{ env.AKS_NAMESPACE }}
-#           done
-      
-#       - name: Azure CLI logout
-#         run: |
-#           az logout
-
-
-
-name: Deploy to AKS
+name: Project Deploy to AKS
 
 on:
   workflow_run:
-    workflows: ["Build and Push"]
+    workflows: ["Project Build and Push Docker Images"]
     types:
       - completed
+    branches:
+      - dev-new
+
+permissions:
+  id-token: write
+  contents: read
+
+env:
+  AKS_NAMESPACE: 'default'
+  ACR_NAME: 'aksretailacr'
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-
-    env:
-      AKS_NAMESPACE: default
-      ACR_NAME: aksretailacr
-
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-    - name: Set up Azure CLI
-      uses: azure/login@v1
-      with:
-        creds: ${{ secrets.AZURE_CREDENTIALS }}
+      - name: Install Azure CLI
+        run: |
+          curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
 
-    - name: Get AKS credentials
-      run: |
-        az aks get-credentials --resource-group microservices-demo-rg --name microservices-demo-aks --overwrite-existing
+      - name: Verify Azure CLI installation
+        run: |
+          az --version
 
-    - name: Verify kubectl context
-      run: |
-        kubectl config current-context
+      - name: Log in to Azure
+        uses: azure/login@v1.4.7
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
-    - name: Download images artifact
-      uses: actions/download-artifact@v2
-      with:
-        name: images
+      - name: Get AKS Credentials
+        run: |
+          az aks get-credentials --resource-group microservices-demo-rg --name microservices-demo-aks --overwrite-existing
 
-    - name: Read images from artifact
-      id: read-images
-      run: |
-        images=$(cat images.txt)
-        echo "::set-output name=images::$images"
+      - name: Verify kubectl context
+        run: |
+          kubectl config current-context
 
-    - name: Deploy all services
-      run: |
-        echo "Deploying all services using release/project-kubernetes-manifests.yaml"
-        kubectl apply -f release/project-kubernetes-manifests.yaml
+      - name: Deploy all services
+        run: |
+          echo "Deploying all services using release/project-kubernetes-manifests.yaml"
+          kubectl apply -f release/project-kubernetes-manifests.yaml
       
-    - name: Update image tags for each service
-      run: |
-        echo "Updating image tags for all services"
-        images="${{ steps.read-images.outputs.images }}"
-        for image in $images; do
-          service=$(echo $image | cut -d'/' -f2 | cut -d':' -f1)
-          kubectl set image deployment/$service server=$image --namespace ${{ env.AKS_NAMESPACE }}
-        done
+      - name: Update image tags for each service
+        run: |
+          echo "Updating image tags for all services to ${{ github.event.inputs.image_tag }}"
+          services=(
+            "currencyservice"
+            "adservice"
+            "cartservice"
+            "checkoutservice"
+            "emailservice"
+            "frontend"
+            "loadgenerator"
+            "paymentservice"
+            "productcatalogservice"
+            "recommendationservice"
+            "shippingservice"
+            "shoppingassistantservice"
+          )
+          for service in "${services[@]}"; do
+            kubectl set image deployment/$service server=${{ env.ACR_NAME }}.azurecr.io/$service:${{ github.event.inputs.image_tag }} --namespace ${{ env.AKS_NAMESPACE }}
+          done
       
-    - name: Azure CLI logout
-      run: |
-        az logout
+      - name: Azure CLI logout
+        run: |
+          az logout
+
+
+
