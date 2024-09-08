@@ -4,11 +4,6 @@ on:
   push:
     branches:
       - dev-new
-    inputs:
-      image_tag:
-        description: 'Tag of the Docker image to deploy'
-        required: true
-        default: 'latest'
 
 permissions:
   id-token: write
@@ -17,7 +12,6 @@ permissions:
 env:
   AZURE_REGION: 'uksouth'
   ACR_NAME: 'aksretailacr'
-  AKS_NAMESPACE: 'default'
   RESOURCE_GROUP_NAME: 'microservices-demo-rg'
 
 jobs:
@@ -103,5 +97,3 @@ jobs:
       - name: Azure CLI logout
         run: |
           az logout
-
-
