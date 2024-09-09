@@ -195,8 +195,8 @@ jobs:
           echo "${{ matrix.service }}=${IMAGE_NAME}:${IMAGE_TAG}" >> images.txt
         shell: bash
 
-      - name: Save image tags
-        uses: actions/upload-artifact@v3
+      - name: Upload image tags artifacts
+        uses: actions/upload-artifact@v2
         with:
           name: image-tags
           path: ./images

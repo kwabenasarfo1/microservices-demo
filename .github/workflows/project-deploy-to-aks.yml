@@ -201,7 +201,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Download image tags from Build step
+      - name: Download image tags artifact
         uses: actions/download-artifact@v3
         with:
           name: image-tags
