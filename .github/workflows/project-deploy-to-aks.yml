@@ -223,6 +223,7 @@ jobs:
       - name: Verify kubectl context
         run: |
           kubectl config current-context
+      
       - name: Download image tags artifact
         uses: actions/download-artifact@v4
         with:

@@ -188,38 +188,31 @@ jobs:
           docker build -t $IMAGE_NAME:$IMAGE_TAG .
           docker push $IMAGE_NAME:$IMAGE_TAG
 
-      - id: set-image-tags
+      - name: set-image-tags
         run: |
-          mkdir -p ./image-tags  # Ensure the images directory exists
+          mkdir -p image-tags  
           IMAGE_TAG=$(git rev-parse --short HEAD)
           if [ "${{ matrix.service }}" == "src/cartservice/src" ]; then
             IMAGE_NAME=${{ env.ACR_NAME }}.azurecr.io/cartservice
           else
             IMAGE_NAME=${{ env.ACR_NAME }}.azurecr.io/$(basename ${{ matrix.service }})
           fi
-          echo "${{ matrix.service }}=${IMAGE_NAME}:${IMAGE_TAG}" >> image-tags.txt
+          echo "${{ matrix.service }}=${IMAGE_NAME}:${IMAGE_TAG}" > image-tags-${{ matrix.service }}.txt
         shell: bash
 
-      # - name: Upload image tags artifact
-      #   uses: actions/upload-artifact@v3
-      #   with:
-      #     name: image-tags
-      #     path: images/image-tags.txt
-      #     retention-days: 5
-      
       - name: Aggregate image tags
         run: |
-          mkdir -p image-tags
+          mkdir -p aggregated-tags
           # Aggregate all image tags into a single file
           for file in image-tags-*.txt; do
-            cat "$file" >> image-tags/image-tags.txt
+            cat "$file" >> aggregated-tags/image-tags.txt
           done
 
-      - name: Upload image tags artifact
+      - name: Upload aggregated image tags
         uses: actions/upload-artifact@v4
         with:
             name: image-tags
-            path: image-tags/image-tags.txt
+            path: aggregated-tags/image-tags.txt
             if-no-files-found: warn
             compression-level: 6
             overwrite: false
