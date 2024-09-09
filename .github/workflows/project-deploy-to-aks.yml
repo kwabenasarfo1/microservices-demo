@@ -327,9 +327,16 @@ jobs:
 
       - name: Update image tags for ${{ matrix.service }}
         run: |
-          IMAGE_TAG=$(cat ./image-tags/image-tags-${{ matrix.service }}.txt)
-          kubectl set image deployment/${{ matrix.service }} server=${IMAGE_TAG} --namespace ${{ env.AKS_NAMESPACE }}
-
+          for SERVICE_NAME in ${{ matrix.service }}; do
+            FILE_PATH="./image-tags/image-tags-${SERVICE_NAME}.txt"
+            if [ -f "$FILE_PATH" ]; then
+              IMAGE_TAG=$(cat "$FILE_PATH" | awk -F: '{print $2}')
+              kubectl set image deployment/$SERVICE_NAME server=$IMAGE_TAG --namespace ${{ env.AKS_NAMESPACE }}
+            else
+              echo "No tag file found for service: $SERVICE_NAME"
+            fi
+          done
+          
       - name: Azure CLI logout
         run: |
           az logout

@@ -283,6 +283,17 @@ jobs:
         run: |
           az acr login --name ${{ env.ACR_NAME }}
 
+      - name: Set Service Name
+        id: set-service-name
+        run: |
+          # Define service names based on the matrix.service value
+          if [ "${{ matrix.service }}" == "src/cartservice/src" ]; then
+            SERVICE_NAME="cartservice"
+          else
+            SERVICE_NAME=$(basename ${{ matrix.service }})
+          fi
+          echo "SERVICE_NAME=$SERVICE_NAME" >> $GITHUB_ENV
+
       - name: Build and push Docker image
         run: |
           DOCKERFILE_PATH=${{ matrix.service }} 
@@ -290,14 +301,10 @@ jobs:
             DOCKERFILE_PATH=${{ matrix.service }}/src
           fi
 
+          
           cd $DOCKERFILE_PATH
 
-          if [ "${{ matrix.service }}" == "src/cartservice/src" ]; then
-            IMAGE_NAME=${{ env.ACR_NAME }}.azurecr.io/cartservice
-          else
-            IMAGE_NAME=${{ env.ACR_NAME }}.azurecr.io/$(basename ${{ matrix.service }})
-          fi
-
+          IMAGE_NAME=${{ env.ACR_NAME }}.azurecr.io/${{ env.SERVICE_NAME }}
           IMAGE_TAG=$(git rev-parse --short HEAD)
           docker build -t $IMAGE_NAME:$IMAGE_TAG .
           docker push $IMAGE_NAME:$IMAGE_TAG
@@ -306,22 +313,18 @@ jobs:
         run: |
           mkdir -p image-tags
           IMAGE_TAG=$(git rev-parse --short HEAD)
-          
-          if [ "${{ matrix.service }}" == "src/cartservice/src" ]; then
-            SERVICE_NAME="cartservice"
-          else
-            SERVICE_NAME=$(basename ${{ matrix.service }})
-          fi
-
-          IMAGE_NAME=${{ env.ACR_NAME }}.azurecr.io/$SERVICE_NAME
-          echo "${IMAGE_NAME}:${IMAGE_TAG}" > image-tags/image-tags-${SERVICE_NAME}.txt
+          echo "${IMAGE_NAME}:${IMAGE_TAG}" > image-tags/image-tags-${{ env.SERVICE_NAME }}.txt
 
       - name: Upload image tags artifact
         uses: actions/upload-artifact@v4
         with:
-          name: image-tags-${SERVICE_NAME}
-          path: image-tags/image-tags-${SERVICE_NAME}.txt
-      
+          name: image-tags-${{ env.SERVICE_NAME }}
+          path: image-tags/image-tags-${{ env.SERVICE_NAME }}.txt
+          if-no-files-found: warn
+          compression-level: 6
+          overwrite: false
+          include-hidden-files: false
+          
       - name: Azure CLI logout
         run: |
           az logout
