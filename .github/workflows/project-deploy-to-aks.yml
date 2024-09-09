@@ -132,26 +132,26 @@ jobs:
           echo "Deploying all services using release/project-kubernetes-manifests.yaml"
           kubectl apply -f release/project-kubernetes-manifests.yaml
       
-      - name: Update image tags for each service
-        run: |
-          echo "Updating image tags for all services to ${{ github.event.inputs.image_tag }}"
-          services=(
-            "currencyservice"
-            "adservice"
-            "cartservice"
-            "checkoutservice"
-            "emailservice"
-            "frontend"
-            "loadgenerator"
-            "paymentservice"
-            "productcatalogservice"
-            "recommendationservice"
-            "shippingservice"
-            "shoppingassistantservice"
-          )
-          for service in "${services[@]}"; do
-            kubectl set image deployment/$service server=${{ env.ACR_NAME }}.azurecr.io/$service:${{ github.event.inputs.image_tag }} --namespace ${{ env.AKS_NAMESPACE }}
-          done
+      # - name: Update image tags for each service
+      #   run: |
+      #     echo "Updating image tags for all services to ${{ github.event.inputs.image_tag }}"
+      #     services=(
+      #       "currencyservice"
+      #       "adservice"
+      #       "cartservice"
+      #       "checkoutservice"
+      #       "emailservice"
+      #       "frontend"
+      #       "loadgenerator"
+      #       "paymentservice"
+      #       "productcatalogservice"
+      #       "recommendationservice"
+      #       "shippingservice"
+      #       "shoppingassistantservice"
+      #     )
+      #     for service in "${services[@]}"; do
+      #       kubectl set image deployment/$service server=${{ env.ACR_NAME }}.azurecr.io/$service:${{ github.event.inputs.image_tag }} --namespace ${{ env.AKS_NAMESPACE }}
+      #     done
       
       # - name: Update image tags for each service
       #   run: |
