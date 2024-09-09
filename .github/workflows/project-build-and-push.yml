@@ -204,7 +204,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: image-tags
-          path: ./images/image-tags.txt
+          path: ./images
 
       - name: Azure CLI logout
         run: |
