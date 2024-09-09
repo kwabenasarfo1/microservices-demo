@@ -174,6 +174,89 @@
 #           az logout
 
 
+# name: Project Deploy to AKS
+
+# on:
+#   workflow_run:
+#     workflows: ["Project Build and Push Docker Images"]
+#     types:
+#       - completed
+#     branches:
+#       - dev-new
+
+# permissions:
+#   id-token: write
+#   contents: read
+
+# env:
+#   AKS_NAMESPACE: 'default'
+#   ACR_NAME: 'aksretailacr'
+
+# jobs:
+#   deploy:
+#     runs-on: ubuntu-latest
+#     if: ${{ github.event.workflow_run.head_branch == 'dev-new' }}
+    
+#     strategy:
+#       matrix:
+#         service:
+#           - adservice
+#           - cartservice
+#           - checkoutservice
+#           - currencyservice
+#           - emailservice
+#           - frontend
+#           - loadgenerator
+#           - paymentservice
+#           - productcatalogservice
+#           - recommendationservice
+#           - shippingservice
+#           - shoppingassistantservice
+
+#     steps:
+#       - name: Checkout code
+#         uses: actions/checkout@v3
+
+#       - name: Install Azure CLI
+#         run: |
+#           curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
+
+#       - name: Verify Azure CLI installation
+#         run: |
+#           az --version
+
+#       - name: Log in to Azure
+#         uses: azure/login@v1.4.7
+#         with:
+#           client-id: ${{ secrets.AZURE_CLIENT_ID }}
+#           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+#           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+#       - name: Get AKS Credentials
+#         run: |
+#           az aks get-credentials --resource-group microservices-demo-rg --name microservices-demo-aks --overwrite-existing
+      
+#       - name: Verify kubectl context
+#         run: |
+#           kubectl config current-context
+      
+#       - name: Download image tags artifact for ${{ matrix.service }}
+#         uses: actions/download-artifact@v4
+#         with:
+#           name: image-tags-${{ matrix.service }}
+#           path: ./image-tags
+
+#       - name: Update image tags for ${{ matrix.service }}
+#         run: |
+#           IMAGE_TAG=$(cat ./image-tags/image-tags-${{ matrix.service }}.txt)
+#           kubectl set image deployment/${{ matrix.service }} server=${IMAGE_TAG} --namespace ${{ env.AKS_NAMESPACE }}
+
+#       - name: Azure CLI logout
+#         run: |
+#           az logout
+
+
+
 name: Project Deploy to AKS
 
 on:
@@ -197,6 +280,22 @@ jobs:
     runs-on: ubuntu-latest
     if: ${{ github.event.workflow_run.head_branch == 'dev-new' }}
 
+    strategy:
+      matrix:
+        service:
+          - adservice
+          - cartservice
+          - checkoutservice
+          - currencyservice
+          - emailservice
+          - frontend
+          - loadgenerator
+          - paymentservice
+          - productcatalogservice
+          - recommendationservice
+          - shippingservice
+          - shoppingassistantservice
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -204,10 +303,6 @@ jobs:
       - name: Install Azure CLI
         run: |
           curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
-
-      - name: Verify Azure CLI installation
-        run: |
-          az --version
 
       - name: Log in to Azure
         uses: azure/login@v1.4.7
@@ -223,23 +318,18 @@ jobs:
       - name: Verify kubectl context
         run: |
           kubectl config current-context
-      
-      - name: Download image tags artifact
+
+      - name: Download image tags artifact for ${{ matrix.service }}
         uses: actions/download-artifact@v4
         with:
-            name: image-tags
-            path: ./image-tags
+          name: image-tags-${{ matrix.service }}
+          path: ./image-tags
 
-      - name: Update image tags for each service
+      - name: Update image tags for ${{ matrix.service }}
         run: |
-          while IFS= read -r line; do
-            SERVICE_NAME=$(echo "$line" | cut -d '=' -f 1)
-            IMAGE_TAG=$(echo "$line" | cut -d '=' -f 2)
-            echo "Updating image for service: $SERVICE_NAME with tag: $IMAGE_TAG"
-            kubectl set image deployment/$SERVICE_NAME server=$IMAGE_TAG --namespace ${{ env.AKS_NAMESPACE }}
-          done < ./image-tags/image-tags.txt
+          IMAGE_TAG=$(cat ./image-tags/image-tags-${{ matrix.service }}.txt)
+          kubectl set image deployment/${{ matrix.service }} server=${IMAGE_TAG} --namespace ${{ env.AKS_NAMESPACE }}
 
       - name: Azure CLI logout
         run: |
           az logout
-

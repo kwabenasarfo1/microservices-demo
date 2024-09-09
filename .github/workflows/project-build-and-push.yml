@@ -101,6 +101,129 @@
 
 
 
+# name: Project Build and Push Docker Images
+
+# on: 
+#   push:
+#     branches:
+#       - dev-new
+
+# permissions:
+#   id-token: write
+#   contents: read
+
+# env:
+#   AZURE_REGION: 'uksouth'
+#   ACR_NAME: 'aksretailacr'
+#   RESOURCE_GROUP_NAME: 'microservices-demo-rg'
+
+# jobs:
+#   build-and-push:
+#     runs-on: ubuntu-latest
+#     timeout-minutes: 60  
+#     strategy:
+#       matrix:
+#         service:
+#           - src/adservice
+#           - src/cartservice/src 
+#           - src/checkoutservice
+#           - src/currencyservice
+#           - src/emailservice
+#           - src/frontend
+#           - src/loadgenerator
+#           - src/paymentservice
+#           - src/productcatalogservice
+#           - src/recommendationservice
+#           - src/shippingservice
+#           - src/shoppingassistantservice
+#     outputs:
+#       image_tags: ${{ steps.aggregate-image-tags.outputs.image_tags }}
+      
+#     steps:
+#       - name: Checkout code
+#         uses: actions/checkout@v3
+
+#       - name: Install Azure CLI
+#         run: |
+#           curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
+
+#       - name: Verify Azure CLI installation
+#         run: |
+#           az --version
+
+#       - name: Log in to Azure
+#         uses: azure/login@v1.4.7
+#         with:
+#           client-id: ${{ secrets.AZURE_CLIENT_ID }}
+#           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+#           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+#       - name: Log in to Azure Container Registry
+#         run: |
+#           az acr login --name ${{ env.ACR_NAME }}
+
+#       - name: Build and push Docker image
+#         run: |
+#           # Adjust the path if your Dockerfile is in a different location
+#           DOCKERFILE_PATH=${{ matrix.service }} 
+#           if [ ! -f "$DOCKERFILE_PATH/Dockerfile" ]; then
+#             DOCKERFILE_PATH=${{ matrix.service }}/src # Check in the 'src' subdirectory
+#           fi
+
+#           if [ ! -f "$DOCKERFILE_PATH/Dockerfile" ]; then
+#             echo "Error: Dockerfile not found in $DOCKERFILE_PATH"
+#             exit 1
+#           fi
+
+#           cd $DOCKERFILE_PATH  # Change to the directory containing the Dockerfile
+
+#           # Special handling for cartservice image name
+#           if [ "${{ matrix.service }}" == "src/cartservice/src" ]; then
+#             IMAGE_NAME=${{ env.ACR_NAME }}.azurecr.io/cartservice
+#           else
+#             IMAGE_NAME=${{ env.ACR_NAME }}.azurecr.io/$(basename ${{ matrix.service }})
+#           fi
+
+#           IMAGE_TAG=$(git rev-parse --short HEAD)
+#           docker build -t $IMAGE_NAME:$IMAGE_TAG .
+#           docker push $IMAGE_NAME:$IMAGE_TAG
+
+#       - name: Set-image-tags
+#         run: |
+#           mkdir -p image-tags  
+#           IMAGE_TAG=$(git rev-parse --short HEAD)
+#           if [ "${{ matrix.service }}" == "src/cartservice/src" ]; then
+#             IMAGE_NAME=${{ env.ACR_NAME }}.azurecr.io/cartservice
+#             SERVICE_NAME="cartservice"
+#           else
+#             SERVICE_NAME=$(basename "${{ matrix.service }}")
+#             IMAGE_NAME=${{ env.ACR_NAME }}.azurecr.io/$SERVICE_NAME
+#           fi
+#           echo "$SERVICE_NAME=${IMAGE_NAME}:${IMAGE_TAG}" > image-tags/${SERVICE_NAME}.txt
+#         shell: bash
+
+#       - name: Aggregate image tags from all services
+#         id: aggregate-image-tags
+#         run: |
+#           mkdir -p aggregated-tags
+#           # Aggregate all image tags into a single file
+#           cat image-tags/*.txt > aggregated-tags/image-tags.txt
+          
+#       - name: Upload aggregated image tags
+#         uses: actions/upload-artifact@v4
+#         with:
+#             name: image-tags-${{ matrix.service }}  # Include service name in the artifact name
+#             path: image-tags/image-tags-${{ matrix.service }}.txt
+#             if-no-files-found: warn
+#             compression-level: 6
+#             overwrite: false
+#             include-hidden-files: false
+
+#       - name: Azure CLI logout
+#         run: |
+#           az logout
+
+
 name: Project Build and Push Docker Images
 
 on: 
@@ -136,9 +259,7 @@ jobs:
           - src/recommendationservice
           - src/shippingservice
           - src/shoppingassistantservice
-    outputs:
-      image_tags: ${{ steps.aggregate-image-tags.outputs.image_tags }}
-      
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -147,37 +268,19 @@ jobs:
         run: |
           curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
 
-      - name: Verify Azure CLI installation
-        run: |
-          az --version
-
-      - name: Log in to Azure
-        uses: azure/login@v1.4.7
-        with:
-          client-id: ${{ secrets.AZURE_CLIENT_ID }}
-          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-
       - name: Log in to Azure Container Registry
         run: |
           az acr login --name ${{ env.ACR_NAME }}
 
       - name: Build and push Docker image
         run: |
-          # Adjust the path if your Dockerfile is in a different location
           DOCKERFILE_PATH=${{ matrix.service }} 
           if [ ! -f "$DOCKERFILE_PATH/Dockerfile" ]; then
-            DOCKERFILE_PATH=${{ matrix.service }}/src # Check in the 'src' subdirectory
+            DOCKERFILE_PATH=${{ matrix.service }}/src
           fi
 
-          if [ ! -f "$DOCKERFILE_PATH/Dockerfile" ]; then
-            echo "Error: Dockerfile not found in $DOCKERFILE_PATH"
-            exit 1
-          fi
+          cd $DOCKERFILE_PATH
 
-          cd $DOCKERFILE_PATH  # Change to the directory containing the Dockerfile
-
-          # Special handling for cartservice image name
           if [ "${{ matrix.service }}" == "src/cartservice/src" ]; then
             IMAGE_NAME=${{ env.ACR_NAME }}.azurecr.io/cartservice
           else
@@ -188,37 +291,25 @@ jobs:
           docker build -t $IMAGE_NAME:$IMAGE_TAG .
           docker push $IMAGE_NAME:$IMAGE_TAG
 
-      - name: Set-image-tags
+      - name: Set image tags
         run: |
-          mkdir -p image-tags  
+          mkdir -p image-tags
           IMAGE_TAG=$(git rev-parse --short HEAD)
           if [ "${{ matrix.service }}" == "src/cartservice/src" ]; then
             IMAGE_NAME=${{ env.ACR_NAME }}.azurecr.io/cartservice
             SERVICE_NAME="cartservice"
           else
-            SERVICE_NAME=$(basename "${{ matrix.service }}")
-            IMAGE_NAME=${{ env.ACR_NAME }}.azurecr.io/$SERVICE_NAME
+            IMAGE_NAME=${{ env.ACR_NAME }}.azurecr.io/$(basename ${{ matrix.service }})
+            SERVICE_NAME=$(basename ${{ matrix.service }})
           fi
-          echo "$SERVICE_NAME=${IMAGE_NAME}:${IMAGE_TAG}" > image-tags/${SERVICE_NAME}.txt
-        shell: bash
+          echo "${IMAGE_NAME}:${IMAGE_TAG}" > image-tags/image-tags-${SERVICE_NAME}.txt
 
-      - name: Aggregate image tags from all services
-        id: aggregate-image-tags
-        run: |
-          mkdir -p aggregated-tags
-          # Aggregate all image tags into a single file
-          cat image-tags/*.txt > aggregated-tags/image-tags.txt
-          
-      - name: Upload aggregated image tags
+      - name: Upload image tags artifact
         uses: actions/upload-artifact@v4
         with:
-            name: image-tags
-            path: aggregated-tags/image-tags.txt
-            if-no-files-found: warn
-            compression-level: 6
-            overwrite: false
-            include-hidden-files: false
-
+          name: image-tags-${{ matrix.service | split('/')[-1] }}  # Use the service name
+          path: image-tags/image-tags-${{ matrix.service | split('/')[-1] }}.txt
+      
       - name: Azure CLI logout
         run: |
           az logout
