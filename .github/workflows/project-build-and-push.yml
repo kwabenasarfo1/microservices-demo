@@ -296,19 +296,19 @@ jobs:
           mkdir -p image-tags
           IMAGE_TAG=$(git rev-parse --short HEAD)
           if [ "${{ matrix.service }}" == "src/cartservice/src" ]; then
-            IMAGE_NAME=${{ env.ACR_NAME }}.azurecr.io/cartservice
             SERVICE_NAME="cartservice"
           else
-            IMAGE_NAME=${{ env.ACR_NAME }}.azurecr.io/$(basename ${{ matrix.service }})
             SERVICE_NAME=$(basename ${{ matrix.service }})
           fi
+
+          IMAGE_NAME=${{ env.ACR_NAME }}.azurecr.io/$SERVICE_NAME
           echo "${IMAGE_NAME}:${IMAGE_TAG}" > image-tags/image-tags-${SERVICE_NAME}.txt
 
       - name: Upload image tags artifact
         uses: actions/upload-artifact@v4
         with:
-          name: image-tags-${{ matrix.service | split('/')[-1] }}  # Use the service name
-          path: image-tags/image-tags-${{ matrix.service | split('/')[-1] }}.txt
+          name: image-tags-${{ matrix.service }}
+          path: image-tags/image-tags-${SERVICE_NAME}.txt
       
       - name: Azure CLI logout
         run: |
