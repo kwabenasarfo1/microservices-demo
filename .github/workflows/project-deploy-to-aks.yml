@@ -225,7 +225,15 @@ jobs:
       - name: Get AKS Credentials
         run: |
           az aks get-credentials --resource-group microservices-demo-rg --name microservices-demo-aks --overwrite-existing
-
+      
+      # - name: Set Kubernetes context
+      #   run: |
+      #       kubectl config set-context my-context --cluster=my-cluster --user=my-user --namespace=${{ env.AKS_NAMESPACE }}
+  
+      # - name: Switch to new context
+      #   run: |
+      #      kubectl config use-context my-context
+      
       - name: Verify kubectl context
         run: |
           kubectl config current-context

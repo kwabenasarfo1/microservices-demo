@@ -195,11 +195,11 @@ jobs:
           echo "${{ matrix.service }}=${IMAGE_NAME}:${IMAGE_TAG}" >> images.txt
         shell: bash
 
-      - name: Upload image tags artifacts
+      - name: Upload image tags artifact
         uses: actions/upload-artifact@v2
         with:
           name: image-tags
-          path: ./images
+          path: ./images/image-tags.txt
 
       - name: Azure CLI logout
         run: |
