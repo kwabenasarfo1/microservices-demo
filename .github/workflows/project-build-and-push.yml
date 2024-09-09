@@ -190,7 +190,7 @@ jobs:
 
       - id: set-image-tags
         run: |
-          mkdir -p ./images  # Ensure the images directory exists
+          mkdir -p ./image-tags  # Ensure the images directory exists
           IMAGE_TAG=$(git rev-parse --short HEAD)
           if [ "${{ matrix.service }}" == "src/cartservice/src" ]; then
             IMAGE_NAME=${{ env.ACR_NAME }}.azurecr.io/cartservice
