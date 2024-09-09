@@ -162,7 +162,7 @@ jobs:
           kubectl set image deployment/checkoutservice server=aksretailacr.azurecr.io/checkoutservice:${{ github.event.inputs.image_tag }} --namespace ${{ env.AKS_NAMESPACE }}
           kubectl set image deployment/emailservice server=aksretailacr.azurecr.io/emailservice:${{ github.event.inputs.image_tag }} --namespace ${{ env.AKS_NAMESPACE }}
           kubectl set image deployment/frontend server=aksretailacr.azurecr.io/frontend:${{ github.event.inputs.image_tag }} --namespace ${{ env.AKS_NAMESPACE }} 
-          kubectl set image deployment/loadgenerator server=aksretailacr.azurecr.io/loadgenerator:${{ github.event.inputs.image_tag }} --namespace ${{ env.AKS_NAMESPACE }} 
+          kubectl set image deployment/loadgenerator main=aksretailacr.azurecr.io/loadgenerator:${{ github.event.inputs.image_tag }} --namespace ${{ env.AKS_NAMESPACE }} 
           kubectl set image deployment/paymentservice server=aksretailacr.azurecr.io/paymentservice:${{ github.event.inputs.image_tag }} --namespace ${{ env.AKS_NAMESPACE }}
           kubectl set image deployment/productcatalogservice server=aksretailacr.azurecr.io/productcatalogservice:${{ github.event.inputs.image_tag }} --namespace ${{ env.AKS_NAMESPACE }}
           kubectl set image deployment/recommendationservice server=aksretailacr.azurecr.io/recommendationservice:${{ github.event.inputs.image_tag }} --namespace ${{ env.AKS_NAMESPACE }}
