@@ -226,14 +226,6 @@ jobs:
         run: |
           az aks get-credentials --resource-group microservices-demo-rg --name microservices-demo-aks --overwrite-existing
       
-      # - name: Set Kubernetes context
-      #   run: |
-      #       kubectl config set-context my-context --cluster=my-cluster --user=my-user --namespace=${{ env.AKS_NAMESPACE }}
-  
-      # - name: Switch to new context
-      #   run: |
-      #      kubectl config use-context my-context
-      
       - name: Verify kubectl context
         run: |
           kubectl config current-context
@@ -244,7 +236,7 @@ jobs:
             SERVICE_NAME=$(echo "$line" | cut -d '=' -f 1)
             IMAGE_TAG=$(echo "$line" | cut -d '=' -f 2)
             kubectl set image deployment/$SERVICE_NAME server=$IMAGE_TAG --namespace ${{ env.AKS_NAMESPACE }}
-          done < ./images/images.txt
+          done < ./images/image-tags.txt
 
       - name: Azure CLI logout
         run: |
