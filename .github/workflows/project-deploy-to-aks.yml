@@ -205,7 +205,7 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: image-tags
-          path: ./images
+          path: ./images/image-tags.txt
 
       - name: Install Azure CLI
         run: |
