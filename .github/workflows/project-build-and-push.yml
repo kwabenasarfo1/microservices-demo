@@ -190,6 +190,7 @@ jobs:
 
       - id: set-image-tags
         run: |
+          mkdir -p ./images  # Ensure the images directory exists
           IMAGE_TAG=$(git rev-parse --short HEAD)
           IMAGE_NAME=${{ env.ACR_NAME }}.azurecr.io/$(basename ${{ matrix.service }})
           echo "${{ matrix.service }}=${IMAGE_NAME}:${IMAGE_TAG}" >> ./images/image-tags.txt
