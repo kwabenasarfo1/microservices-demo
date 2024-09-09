@@ -223,9 +223,9 @@ jobs:
       - name: Verify kubectl context
         run: |
           kubectl config current-context
-          - name: Download image tags artifact
-          uses: actions/download-artifact@v4
-          with:
+      - name: Download image tags artifact
+        uses: actions/download-artifact@v4
+        with:
             name: image-tags
             path: ./image-tags
 
@@ -234,6 +234,7 @@ jobs:
           while IFS= read -r line; do
             SERVICE_NAME=$(echo "$line" | cut -d '=' -f 1)
             IMAGE_TAG=$(echo "$line" | cut -d '=' -f 2)
+            echo "Updating image for service: $SERVICE_NAME with tag: $IMAGE_TAG"
             kubectl set image deployment/$SERVICE_NAME server=$IMAGE_TAG --namespace ${{ env.AKS_NAMESPACE }}
           done < ./image-tags/image-tags.txt
 

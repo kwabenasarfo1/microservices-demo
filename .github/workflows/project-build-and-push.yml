@@ -206,12 +206,24 @@ jobs:
       #     name: image-tags
       #     path: images/image-tags.txt
       #     retention-days: 5
+      
+      - name: Aggregate image tags
+        run: |
+          mkdir -p image-tags
+          # Aggregate all image tags into a single file
+          for file in image-tags-*.txt; do
+            cat "$file" >> image-tags/image-tags.txt
+          done
 
       - name: Upload image tags artifact
         uses: actions/upload-artifact@v4
         with:
             name: image-tags
-            path: image-tags.txt
+            path: image-tags/image-tags.txt
+            if-no-files-found: warn
+            compression-level: 6
+            overwrite: false
+            include-hidden-files: false
 
       - name: Azure CLI logout
         run: |
