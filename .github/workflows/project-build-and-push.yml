@@ -204,7 +204,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: image-tags
-          path: ./images/image-tags.txt
+          path: images/image-tags.txt
           retention-days: 5
 
       - name: Azure CLI logout
