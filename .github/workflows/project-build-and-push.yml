@@ -197,15 +197,21 @@ jobs:
           else
             IMAGE_NAME=${{ env.ACR_NAME }}.azurecr.io/$(basename ${{ matrix.service }})
           fi
-          echo "${{ matrix.service }}=${IMAGE_NAME}:${IMAGE_TAG}" >> ./images/image-tags.txt
+          echo "${{ matrix.service }}=${IMAGE_NAME}:${IMAGE_TAG}" >> image-tags.txt
         shell: bash
 
+      # - name: Upload image tags artifact
+      #   uses: actions/upload-artifact@v3
+      #   with:
+      #     name: image-tags
+      #     path: images/image-tags.txt
+      #     retention-days: 5
+
       - name: Upload image tags artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
-          name: image-tags
-          path: images/image-tags.txt
-          retention-days: 5
+            name: image-tags
+            path: image-tags.txt
 
       - name: Azure CLI logout
         run: |

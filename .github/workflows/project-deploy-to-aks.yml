@@ -201,12 +201,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Download image tags artifact
-        uses: actions/download-artifact@v3
-        with:
-          name: image-tags
-          path: images
-
       - name: Install Azure CLI
         run: |
           curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
@@ -229,6 +223,11 @@ jobs:
       - name: Verify kubectl context
         run: |
           kubectl config current-context
+          - name: Download image tags artifact
+          uses: actions/download-artifact@v4
+          with:
+            name: image-tags
+            path: ./image-tags
 
       - name: Update image tags for each service
         run: |
@@ -236,7 +235,7 @@ jobs:
             SERVICE_NAME=$(echo "$line" | cut -d '=' -f 1)
             IMAGE_TAG=$(echo "$line" | cut -d '=' -f 2)
             kubectl set image deployment/$SERVICE_NAME server=$IMAGE_TAG --namespace ${{ env.AKS_NAMESPACE }}
-          done < ./images/image-tags.txt
+          done < ./image-tags/image-tags.txt
 
       - name: Azure CLI logout
         run: |
