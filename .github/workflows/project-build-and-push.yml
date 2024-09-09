@@ -137,7 +137,7 @@ jobs:
           - src/shippingservice
           - src/shoppingassistantservice
     outputs:
-      image_tags: ${{ steps.set-image-tags.outputs.image_tags }}
+      image_tags: ${{ steps.aggregate-image-tags.outputs.image_tags }}
       
     steps:
       - name: Checkout code
@@ -188,26 +188,27 @@ jobs:
           docker build -t $IMAGE_NAME:$IMAGE_TAG .
           docker push $IMAGE_NAME:$IMAGE_TAG
 
-      - name: set-image-tags
+      - name: Set-image-tags
         run: |
           mkdir -p image-tags  
           IMAGE_TAG=$(git rev-parse --short HEAD)
           if [ "${{ matrix.service }}" == "src/cartservice/src" ]; then
             IMAGE_NAME=${{ env.ACR_NAME }}.azurecr.io/cartservice
+            SERVICE_NAME="cartservice"
           else
-            IMAGE_NAME=${{ env.ACR_NAME }}.azurecr.io/$(basename ${{ matrix.service }})
+            SERVICE_NAME=$(basename "${{ matrix.service }}")
+            IMAGE_NAME=${{ env.ACR_NAME }}.azurecr.io/$SERVICE_NAME
           fi
-          echo "${{ matrix.service }}=${IMAGE_NAME}:${IMAGE_TAG}" > image-tags-${{ matrix.service }}.txt
+          echo "$SERVICE_NAME=${IMAGE_NAME}:${IMAGE_TAG}" > image-tags/${SERVICE_NAME}.txt
         shell: bash
 
-      - name: Aggregate image tags
+      - name: Aggregate image tags from all services
+        id: aggregate-image-tags
         run: |
           mkdir -p aggregated-tags
           # Aggregate all image tags into a single file
-          for file in image-tags-*.txt; do
-            cat "$file" >> aggregated-tags/image-tags.txt
-          done
-
+          cat image-tags/*.txt > aggregated-tags/image-tags.txt
+          
       - name: Upload aggregated image tags
         uses: actions/upload-artifact@v4
         with:
