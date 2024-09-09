@@ -318,8 +318,8 @@ jobs:
       - name: Upload image tags artifact
         uses: actions/upload-artifact@v4
         with:
-          name: image-tags-${SERVICE_NAME}
-          path: image-tags/image-tags-${SERVICE_NAME}.txt
+          name: image-tags-${{SERVICE_NAME}}
+          path: image-tags/image-tags-${{SERVICE_NAME}}.txt
       
       - name: Azure CLI logout
         run: |
