@@ -192,7 +192,7 @@ jobs:
         run: |
           IMAGE_TAG=$(git rev-parse --short HEAD)
           IMAGE_NAME=${{ env.ACR_NAME }}.azurecr.io/$(basename ${{ matrix.service }})
-          echo "${{ matrix.service }}=${IMAGE_NAME}:${IMAGE_TAG}" >> images.txt
+          echo "${{ matrix.service }}=${IMAGE_NAME}:${IMAGE_TAG}" >> ./images/image-tags.txt
         shell: bash
 
       - name: Upload image tags artifact
