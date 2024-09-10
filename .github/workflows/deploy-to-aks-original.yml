@@ -57,8 +57,8 @@ jobs:
 
       - name: Deploy all services
         run: |
-          echo "Deploying all services using kubernetes-manifests-original.yaml"
-          kubectl apply -f kubernetes-manifests-original.yaml
+          echo "Deploying all services using .github/workflows/kubernetes-manifests-original.yaml"
+          kubectl apply -f .github/workflows/kubernetes-manifests-original.yaml
 
       - name: Update image tags for each service
         run: |
