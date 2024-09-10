@@ -1429,7 +1429,7 @@ spec:
               - ALL
           privileged: false
           readOnlyRootFilesystem: true
-        image: aksretailacr.azurecr.io/currencyservice:latest
+        image: currencyservice
         ports:
         - name: grpc
           containerPort: 7000
@@ -1538,7 +1538,7 @@ spec:
               - ALL
           privileged: false
           readOnlyRootFilesystem: true
-        image: aksretailacr.azurecr.io/loadgenerator:latest1
+        image: loadgenerator
         env:
         - name: FRONTEND_ADDR
           value: "frontend:80"
@@ -1588,7 +1588,7 @@ spec:
               - ALL
           privileged: false
           readOnlyRootFilesystem: true
-        image: aksretailacr.azurecr.io/productcatalogservice:latest
+        image: productcatalogservice
         ports:
         - containerPort: 3550
         env:
@@ -1660,7 +1660,7 @@ spec:
                 - ALL
             privileged: false
             readOnlyRootFilesystem: true
-          image: aksretailacr.azurecr.io/checkoutservice:latest
+          image: checkoutservice
           ports:
           - containerPort: 5050
           readinessProbe:
@@ -1742,7 +1742,7 @@ spec:
               - ALL
           privileged: false
           readOnlyRootFilesystem: true
-        image: gaksretailacr.azurecr.io/shippingservice:latest
+        image: shippingservice
         ports:
         - containerPort: 50051
         env:
@@ -1816,7 +1816,7 @@ spec:
               - ALL
           privileged: false
           readOnlyRootFilesystem: true
-        image: aksretailacr.azurecr.io/cartservice:latest
+        image: cartservice
         ports:
         - containerPort: 7070
         env:
@@ -1959,7 +1959,7 @@ spec:
               - ALL
           privileged: false
           readOnlyRootFilesystem: true
-        image: aksretailacr.azurecr.io/emailservice:latest
+        image: emailservice
         ports:
         - containerPort: 8080
         env:
@@ -2034,7 +2034,7 @@ spec:
               - ALL
           privileged: false
           readOnlyRootFilesystem: true
-        image: aksretailacr.azurecr.io/paymentservice:latest
+        image: paymentservice
         ports:
         - containerPort: 50051
         env:
@@ -2108,7 +2108,7 @@ spec:
                 - ALL
             privileged: false
             readOnlyRootFilesystem: true
-          image: aksretailacr.azurecr.io/frontend:latest
+          image: frontend
           ports:
           - containerPort: 8080
           readinessProbe:
@@ -2235,7 +2235,7 @@ spec:
               - ALL
           privileged: false
           readOnlyRootFilesystem: true
-        image: aksretailacr.azurecr.io/recommendationservice:latest
+        image: recommendationservice
         ports:
         - containerPort: 8080
         readinessProbe:

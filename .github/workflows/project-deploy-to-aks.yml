@@ -341,7 +341,6 @@ jobs:
             FILE_PATH="./image-tags/image-tags-${SERVICE_NAME}.txt"
             if [ -f "$FILE_PATH" ]; then
               IMAGE_TAG=$(cat "$FILE_PATH" | awk -F: '{print $2}')
-              kubectl set image deployment/$SERVICE_NAME server=$IMAGE_TAG --namespace ${{ env.AKS_NAMESPACE }}
             else
               echo "No tag file found for service: $SERVICE_NAME"
             fi
@@ -349,3 +348,4 @@ jobs:
       - name: Azure CLI logout
         run: |
           az logout
+# kubectl set image deployment/$SERVICE_NAME server=$IMAGE_TAG --namespace ${{ env.AKS_NAMESPACE }}
