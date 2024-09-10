@@ -1429,7 +1429,7 @@ spec:
               - ALL
           privileged: false
           readOnlyRootFilesystem: true
-        image: currencyservice
+        image: aksretailacr.azurecr.io/currencyservice:latest
         ports:
         - name: grpc
           containerPort: 7000
@@ -1538,7 +1538,7 @@ spec:
               - ALL
           privileged: false
           readOnlyRootFilesystem: true
-        image: loadgenerator
+        image: aksretailacr.azurecr.io/loadgenerator:latest
         env:
         - name: FRONTEND_ADDR
           value: "frontend:80"
@@ -1588,7 +1588,7 @@ spec:
               - ALL
           privileged: false
           readOnlyRootFilesystem: true
-        image: productcatalogservice
+        image: aksretailacr.azurecr.io/productcatalogservice:latest
         ports:
         - containerPort: 3550
         env:
@@ -1660,7 +1660,7 @@ spec:
                 - ALL
             privileged: false
             readOnlyRootFilesystem: true
-          image: checkoutservice
+          image: aksretailacr.azurecr.io/checkoutservice:latest
           ports:
           - containerPort: 5050
           readinessProbe:
@@ -1742,7 +1742,7 @@ spec:
               - ALL
           privileged: false
           readOnlyRootFilesystem: true
-        image: shippingservice
+        image: aksretailacr.azurecr.io/shippingservice:latest
         ports:
         - containerPort: 50051
         env:
@@ -1816,7 +1816,7 @@ spec:
               - ALL
           privileged: false
           readOnlyRootFilesystem: true
-        image: cartservice
+        image: aksretailacr.azurecr.io/cartservice:latest
         ports:
         - containerPort: 7070
         env:
@@ -1959,7 +1959,7 @@ spec:
               - ALL
           privileged: false
           readOnlyRootFilesystem: true
-        image: emailservice
+        image: aksretailacr.azurecr.io/emailservice:latest
         ports:
         - containerPort: 8080
         env:
@@ -2034,7 +2034,7 @@ spec:
               - ALL
           privileged: false
           readOnlyRootFilesystem: true
-        image: paymentservice
+        image: aksretailacr.azurecr.io/paymentservice:latest
         ports:
         - containerPort: 50051
         env:
@@ -2108,7 +2108,7 @@ spec:
                 - ALL
             privileged: false
             readOnlyRootFilesystem: true
-          image: frontend
+          image: aksretailacr.azurecr.io/frontend:latest
           ports:
           - containerPort: 8080
           readinessProbe:
@@ -2157,10 +2157,11 @@ spec:
           - name: ENABLE_ASSISTANT
             value: "true"
           - name: FRONTEND_MESSAGE
-            value: "Replace this with a message you want to display on all pages."
-          # As part of an optional Google Cloud demo, you can run an optional microservice called the "packaging service".
-          # - name: PACKAGING_SERVICE_URL
-          #   value: "" # This value would look like "http://123.123.123"
+            value: "DevOps and Cloud Labs ROCKS!!! :)"
+              #  value: "Replace this with a message you want to display on all pages."
+              # As part of an optional Google Cloud demo, you can run an optional microservice called the "packaging service".
+              # - name: PACKAGING_SERVICE_URL
+              #   value: "" # This value would look like "http://123.123.123"
           resources:
             requests:
               cpu: 100m
@@ -2235,7 +2236,7 @@ spec:
               - ALL
           privileged: false
           readOnlyRootFilesystem: true
-        image: recommendationservice
+        image: aksretailacr.azurecr.io/recommendationservice:latest
         ports:
         - containerPort: 8080
         readinessProbe:
