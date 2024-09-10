@@ -325,9 +325,6 @@ jobs:
           SERVICE_NAME=${{ matrix.service }}
           echo "SERVICE_NAME=$SERVICE_NAME" >> $GITHUB_ENV
 
-      - name: Print run-id from previous workflow
-        run: echo "The run-id from the previous workflow is ${{ github.event.workflow_run.outputs.run_id }}"
-      
       - name: Download image tags artifact for ${{env.SERVICE_NAME}} }}
         uses: actions/download-artifact@v4
         with:
@@ -338,9 +335,7 @@ jobs:
           repository: ${{ github.repository }}
           run-id: ${{ github.event.workflow_run.outputs.run_id }} 
 
-
-
-      - name: Update image tags for ${{ matrix.service }}
+      - name: Update image tags for ${{ env.SERVICE_NAME }}
         run: |
             SERVICE_NAME=${{ env.SERVICE_NAME }}
             FILE_PATH="./image-tags/image-tags-${SERVICE_NAME}.txt"
