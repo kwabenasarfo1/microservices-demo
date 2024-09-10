@@ -319,11 +319,20 @@ jobs:
         run: |
           kubectl config current-context
 
+      - name: Print run-id from previous workflow
+        run: echo "The run-id from the previous workflow is ${{ github.event.workflow_run.outputs.run_id }}"
+      
       - name: Download image tags artifact for ${{ matrix.service }}
         uses: actions/download-artifact@v4
         with:
           name: image-tags-${{ matrix.service }}
           path: ./image-tags
+          merge-multiple: false
+          github-token: ${{ secrets.GH_PAT }}
+          repository: actions/toolkit
+          run-id: ${{ github.event.workflow_run.outputs.run_id }} 
+
+
 
       - name: Update image tags for ${{ matrix.service }}
         run: |

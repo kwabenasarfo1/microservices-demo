@@ -243,6 +243,8 @@ env:
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
+    outputs:
+      run_id: ${{ steps.set-run-id.outputs.run_id }}
     timeout-minutes: 60  
     strategy:
       matrix:
@@ -308,6 +310,13 @@ jobs:
           IMAGE_TAG=$(git rev-parse --short HEAD)
           docker build -t $IMAGE_NAME:$IMAGE_TAG .
           docker push $IMAGE_NAME:$IMAGE_TAG
+      
+      - name: Set run-id as output
+        id: set-run-id
+        run: echo "::set-output name=run_id::${{ github.run_id }}"
+  
+      - name: Print the run-id
+        run: echo "This workflow's run-id is ${{ github.run_id }}"
 
       - name: Set image tags
         run: |
