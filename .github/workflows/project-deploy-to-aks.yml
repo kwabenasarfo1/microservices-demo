@@ -328,7 +328,7 @@ jobs:
           path: image-tags
           merge-multiple: false
           github-token: ${{ secrets.GH_PAT }}
-          repository: actions/toolkit
+          repository: ${{ github.repository }}
           run-id: ${{ github.event.workflow_run.outputs.run_id }} 
 
 
