@@ -325,7 +325,7 @@ jobs:
       - name: Download image tags artifact for ${{ matrix.service }}
         uses: actions/download-artifact@v4
         with:
-          path: ./image-tags
+          path: image-tags
           merge-multiple: false
           github-token: ${{ secrets.GH_PAT }}
           repository: actions/toolkit
