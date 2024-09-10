@@ -325,7 +325,8 @@ jobs:
       - name: Download image tags artifact for ${{ matrix.service }}
         uses: actions/download-artifact@v4
         with:
-          path: image-tags
+          name: image-tags-${{ matrix.service }}
+          path: ./image-tags
           merge-multiple: false
           github-token: ${{ secrets.GH_PAT }}
           repository: ${{ github.repository }}
@@ -335,7 +336,7 @@ jobs:
 
       - name: Update image tags for ${{ matrix.service }}
         run: |
-          for SERVICE_NAME in ${{ matrix.service }}; do
+            SERVICE_NAME=${{ matrix.service }}
             FILE_PATH="./image-tags/image-tags-${SERVICE_NAME}.txt"
             if [ -f "$FILE_PATH" ]; then
               IMAGE_TAG=$(cat "$FILE_PATH" | awk -F: '{print $2}')
@@ -343,8 +344,7 @@ jobs:
             else
               echo "No tag file found for service: $SERVICE_NAME"
             fi
-          done
-          
+                    
       - name: Azure CLI logout
         run: |
           az logout
