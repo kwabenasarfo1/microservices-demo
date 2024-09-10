@@ -329,17 +329,16 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: image-tags-${{ env.SERVICE_NAME }}
-          path: ./image-tags
+          path: ./image-tags/${{ env.SERVICE_NAME }}
           merge-multiple: false
           github-token: ${{ secrets.GH_PAT }}
           repository: ${{ github.repository }}
           run-id: ${{ github.event.workflow_run.outputs.run_id }} 
-          if-no-files-found: warn
-
+          
       - name: Update image tags for ${{ env.SERVICE_NAME }}
         run: |
             SERVICE_NAME=${{ env.SERVICE_NAME }}
-            FILE_PATH="./image-tags/image-tags-${SERVICE_NAME}.txt"
+            FILE_PATH="./image-tags/${SERVICE_NAME}.txt"
             if [ -f "$FILE_PATH" ]; then
               IMAGE_TAG=$(cat "$FILE_PATH" | awk -F: '{print $2}')
             else
