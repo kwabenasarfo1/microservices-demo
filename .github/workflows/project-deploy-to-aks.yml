@@ -334,6 +334,7 @@ jobs:
           github-token: ${{ secrets.GH_PAT }}
           repository: ${{ github.repository }}
           run-id: ${{ github.event.workflow_run.outputs.run_id }} 
+          if-no-files-found: warn
 
       - name: Update image tags for ${{ env.SERVICE_NAME }}
         run: |
