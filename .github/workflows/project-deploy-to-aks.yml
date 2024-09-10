@@ -319,13 +319,19 @@ jobs:
         run: |
           kubectl config current-context
 
+      - name: Set Service Name
+        id: set-service-name
+        run: |
+          SERVICE_NAME=${{ matrix.service }}
+          echo "SERVICE_NAME=$SERVICE_NAME" >> $GITHUB_ENV
+
       - name: Print run-id from previous workflow
         run: echo "The run-id from the previous workflow is ${{ github.event.workflow_run.outputs.run_id }}"
       
-      - name: Download image tags artifact for ${{ matrix.service }}
+      - name: Download image tags artifact for ${{env.SERVICE_NAME}} }}
         uses: actions/download-artifact@v4
         with:
-          name: image-tags-${{ matrix.service }}
+          name: image-tags-${{ env.SERVICE_NAME }}
           path: ./image-tags
           merge-multiple: false
           github-token: ${{ secrets.GH_PAT }}
@@ -336,7 +342,7 @@ jobs:
 
       - name: Update image tags for ${{ matrix.service }}
         run: |
-            SERVICE_NAME=${{ matrix.service }}
+            SERVICE_NAME=${{ env.SERVICE_NAME }}
             FILE_PATH="./image-tags/image-tags-${SERVICE_NAME}.txt"
             if [ -f "$FILE_PATH" ]; then
               IMAGE_TAG=$(cat "$FILE_PATH" | awk -F: '{print $2}')
