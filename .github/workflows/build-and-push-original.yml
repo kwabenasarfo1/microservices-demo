@@ -1,9 +1,9 @@
 name: Build and Push Docker Images
 
-on: 
-  push:
-    branches:
-      - dev-new
+#on: 
+#  push:
+#    branches:
+#      - dev-new
 
 permissions:
   id-token: write
