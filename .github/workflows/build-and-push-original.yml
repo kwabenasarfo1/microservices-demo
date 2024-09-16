@@ -91,7 +91,7 @@ jobs:
         run: |
           git config --local user.email "actions@github.com"
           git config --local user.name "GitHub Actions"
-          git add k8s/*.yaml
+          git add release/*.yaml
           git commit -m "Updated image tags for $(basename ${{ matrix.service }}) to ${{ env.VERSION_TAG }}"
           git push origin dev-new  # Replace with your target branch
 
