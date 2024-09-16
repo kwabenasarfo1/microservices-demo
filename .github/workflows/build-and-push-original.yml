@@ -85,7 +85,7 @@ jobs:
       - name: Update YAML files with new image tags
         run: |
           # Assuming your Kubernetes YAML files are in a "k8s" directory
-          find argocd -type f -name '*.yaml' -exec sed -i "s#${{ env.ACR_NAME }}.azurecr.io/$(basename ${{ matrix.service }}):.*#${{ env.ACR_NAME }}.azurecr.io/$(basename ${{ matrix.service }}):${{ env.VERSION_TAG }}#g" {} +
+          find release -type f -name '*.yaml' -exec sed -i "s#${{ env.ACR_NAME }}.azurecr.io/$(basename ${{ matrix.service }}):.*#${{ env.ACR_NAME }}.azurecr.io/$(basename ${{ matrix.service }}):${{ env.VERSION_TAG }}#g" {} +
 
       - name: Commit and push updated YAML files
         run: |
