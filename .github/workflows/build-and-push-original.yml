@@ -95,8 +95,8 @@ jobs:
           git config --local user.name "GitHub Actions"
           git add release/*.yaml
           git commit -m "Updated image tags for $(basename ${{ matrix.service }}) to ${{ env.VERSION_TAG }}"
-          git push origin dev-new  # Replace with your target remote branch
-
+          git push https://x-access-token:${{ secrets.GH_PAT }}@github.com/kwabenasarfo1/microservices-demo.git dev-new # Replace with your target remote branch
+      
       - name: Azure CLI logout
         run: |
           az logout
