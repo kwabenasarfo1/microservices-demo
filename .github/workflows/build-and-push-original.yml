@@ -4,9 +4,8 @@ on:
   push:
     branches:
       - dev-new
-  
   workflow_dispatch:
-
+  
 permissions:
   id-token: write
   contents: read
