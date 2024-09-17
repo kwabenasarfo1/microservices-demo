@@ -89,6 +89,8 @@ jobs:
           find release -type f -name '*.yaml' -exec sed -i "s#${{ env.ACR_NAME }}.azurecr.io/$(basename ${{ matrix.service }}):.*#${{ env.ACR_NAME }}.azurecr.io/$(basename ${{ matrix.service }}):${{ env.VERSION_TAG }}#g" {} +
 
       - name: Commit and push updated YAML files
+      - uses: actions/checkout@v3
+      - shell: bash
         run: |
           git config --local user.email "actions@github.com"
           git config --local user.name "GitHub Actions"
