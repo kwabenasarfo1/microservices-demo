@@ -101,6 +101,24 @@ jobs:
     
       - name: Commit and push updated YAML files
         run: |
+          retry() {
+            local n=0
+            local max=5
+            local delay=10
+            while true; do
+              "$@" && break || {
+                n=$((n+1))
+                if [ $n -lt $max ]; then
+                  echo "Command failed. Attempt $n/$max:"
+                  sleep $delay
+                else
+                  echo "Command failed after $n attempts."
+                  exit 1
+                fi
+              }
+            done
+          }
+          
           git config --local user.email "actions@github.com"
           git config --local user.name "GitHub Actions"
           
@@ -108,8 +126,10 @@ jobs:
           git add release/*.yaml
           git commit -m "Updated image tags for $(basename ${{ matrix.service }}) to ${{ env.VERSION_TAG }}"
 
-          # Pull the latest changes from the remote branch with rebase
-          git pull --rebase https://x-access-token:${{ secrets.GH_PAT }}@github.com/kwabenasarfo1/microservices-demo.git dev-new
+          # Fetch and rebase to integrate remote changes
+          git fetch https://x-access-token:${{ secrets.GH_PAT }}@github.com/kwabenasarfo1/microservices-demo.git dev-new
+          
+          git rebase https://x-access-token:${{ secrets.GH_PAT }}@github.com/kwabenasarfo1/microservices-demo.git/dev-new
 
           # Push the changes to the remote branch
           git push https://x-access-token:${{ secrets.GH_PAT }}@github.com/kwabenasarfo1/microservices-demo.git dev-new
