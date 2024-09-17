@@ -895,7 +895,7 @@ metadata:
 #               - ALL
 #           privileged: false
 #           readOnlyRootFilesystem: true
-#         image: aksretailacr.azurecr.io/shoppingassistantservice:abaddb6
+#         image: aksretailacr.azurecr.io/shoppingassistantservice:ecc4545
 #         ports:
 #         - containerPort: 80
 #         readinessProbe:
