@@ -823,7 +823,7 @@ spec:
               - ALL
           privileged: false
           readOnlyRootFilesystem: true
-        image: aksretailacr.azurecr.io/adservice:latest
+        image: aksretailacr.azurecr.io/adservice:106f262
         ports:
         - containerPort: 9555
         env:
