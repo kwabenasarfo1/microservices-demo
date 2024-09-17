@@ -112,7 +112,7 @@ spec:
               - ALL
           privileged: false
           readOnlyRootFilesystem: true
-        image: aksretailacr.azurecr.io/loadgenerator:latest
+        image: aksretailacr.azurecr.io/loadgenerator:1ad1390
         env:
         - name: FRONTEND_ADDR
           value: "frontend:80"
