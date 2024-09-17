@@ -232,7 +232,7 @@ spec:
                 - ALL
             privileged: false
             readOnlyRootFilesystem: true
-          image: aksretailacr.azurecr.io/checkoutservice:abaddb6
+          image: aksretailacr.azurecr.io/checkoutservice:ecc4545
           ports:
           - containerPort: 5050
           readinessProbe:
