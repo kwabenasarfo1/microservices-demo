@@ -662,7 +662,7 @@ spec:
                 - ALL
             privileged: false
             readOnlyRootFilesystem: true
-          image: aksretailacr.azurecr.io/frontend:e751db9
+          image: aksretailacr.azurecr.io/frontend:febedb6
           ports:
           - containerPort: 8080
           readinessProbe:
