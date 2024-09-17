@@ -377,7 +377,7 @@ spec:
               - ALL
           privileged: false
           readOnlyRootFilesystem: true
-        image: aksretailacr.azurecr.io/cartservice:94fe165
+        image: aksretailacr.azurecr.io/cartservice:106f262
         ports:
         - containerPort: 7070
         env:
