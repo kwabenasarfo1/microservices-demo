@@ -127,12 +127,11 @@ jobs:
           git commit -m "Updated image tags for $(basename ${{ matrix.service }}) to ${{ env.VERSION_TAG }}"
 
           # Fetch and rebase to integrate remote changes
-          git fetch https://x-access-token:${{ secrets.GH_PAT }}@github.com/kwabenasarfo1/microservices-demo.git dev-new
-          
-          git rebase https://x-access-token:${{ secrets.GH_PAT }}@github.com/kwabenasarfo1/microservices-demo.git/dev-new
+          retry git fetch origin dev-new
+          retry git rebase origin/dev-new
 
           # Push the changes to the remote branch
-          git push https://x-access-token:${{ secrets.GH_PAT }}@github.com/kwabenasarfo1/microservices-demo.git dev-new
+          retry git push origin dev-new
       
       - name: Azure CLI logout
         run: |
