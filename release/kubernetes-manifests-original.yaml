@@ -305,7 +305,7 @@ spec:
               - ALL
           privileged: false
           readOnlyRootFilesystem: true
-        image: aksretailacr.azurecr.io/shippingservice:febedb6
+        image: aksretailacr.azurecr.io/shippingservice:99e18ad
         ports:
         - containerPort: 50051
         env:
