@@ -85,9 +85,20 @@ jobs:
 
       - name: Update YAML files with new image tags
         run: |
-          # Assuming your Kubernetes YAML files are in a "k8s" directory
-          find release -type f -name '*.yaml' -exec sed -i "s#${{ env.ACR_NAME }}.azurecr.io/$(basename ${{ matrix.service }}):.*#${{ env.ACR_NAME }}.azurecr.io/$(basename ${{ matrix.service }}):${{ env.VERSION_TAG }}#g" {} +
+          # Assuming your Kubernetes YAML files are in a "release" directory
+          if [[ "${{ matrix.service }}" == "src/cartservice/src" ]]; then
+            # Special handling for cartservice
+            find release -type f -name '*.yaml' -exec sed -i "s#${{ env.ACR_NAME }}.azurecr.io/cartservice:.*#${{ env.ACR_NAME }}.azurecr.io/cartservice:${{ env.VERSION_TAG }}#g" {} +
+          else
+            # Handle all other services
+            find release -type f -name '*.yaml' -exec sed -i "s#${{ env.ACR_NAME }}.azurecr.io/$(basename ${{ matrix.service }}):.*#${{ env.ACR_NAME }}.azurecr.io/$(basename ${{ matrix.service }}):${{ env.VERSION_TAG }}#g" {} +
+          fi
 
+      - name: Check if YAML files have been updated
+        run: |
+          ls -l release/
+          git diff release/
+    
       - name: Commit and push updated YAML files
         run: |
           git config --local user.email "actions@github.com"
