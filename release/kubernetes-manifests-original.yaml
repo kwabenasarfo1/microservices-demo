@@ -161,7 +161,7 @@ spec:
               - ALL
           privileged: false
           readOnlyRootFilesystem: true
-        image: aksretailacr.azurecr.io/productcatalogservice:106f262
+        image: aksretailacr.azurecr.io/productcatalogservice:ecc4545
         ports:
         - containerPort: 3550
         env:
