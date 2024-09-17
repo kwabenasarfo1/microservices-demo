@@ -519,7 +519,7 @@ spec:
               - ALL
           privileged: false
           readOnlyRootFilesystem: true
-        image: aksretailacr.azurecr.io/emailservice:e751db9
+        image: aksretailacr.azurecr.io/emailservice:99e18ad
         ports:
         - containerPort: 8080
         env:
