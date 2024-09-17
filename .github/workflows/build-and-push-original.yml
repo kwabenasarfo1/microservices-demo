@@ -101,7 +101,7 @@ jobs:
           git pull --rebase https://x-access-token:${{ secrets.GH_PAT }}@github.com/kwabenasarfo1/microservices-demo.git dev-new
           
           # Push the changes to the remote branch
-          git push https://x-access-token:${{ secrets.GH_PAT }}@github.com/kwabenasarfo1/microservices-demo.git HEAD:dev-new
+          git push --force https://x-access-token:${{ secrets.GH_PAT }}@github.com/kwabenasarfo1/microservices-demo.git HEAD:dev-new
       
       - name: Azure CLI logout
         run: |
