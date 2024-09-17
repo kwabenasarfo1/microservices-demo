@@ -36,7 +36,7 @@ spec:
               - ALL
           privileged: false
           readOnlyRootFilesystem: true
-        image: aksretailacr.azurecr.io/currencyservice:106f262
+        image: aksretailacr.azurecr.io/currencyservice:abaddb6
         ports:
         - name: grpc
           containerPort: 7000
@@ -232,7 +232,7 @@ spec:
                 - ALL
             privileged: false
             readOnlyRootFilesystem: true
-          image: aksretailacr.azurecr.io/checkoutservice:106f262
+          image: aksretailacr.azurecr.io/checkoutservice:abaddb6
           ports:
           - containerPort: 5050
           readinessProbe:
@@ -305,7 +305,7 @@ spec:
               - ALL
           privileged: false
           readOnlyRootFilesystem: true
-        image: aksretailacr.azurecr.io/shippingservice:106f262
+        image: aksretailacr.azurecr.io/shippingservice:abaddb6
         ports:
         - containerPort: 50051
         env:
@@ -377,7 +377,7 @@ spec:
               - ALL
           privileged: false
           readOnlyRootFilesystem: true
-        image: aksretailacr.azurecr.io/cartservice:106f262
+        image: aksretailacr.azurecr.io/cartservice:abaddb6
         ports:
         - containerPort: 7070
         env:
@@ -519,7 +519,7 @@ spec:
               - ALL
           privileged: false
           readOnlyRootFilesystem: true
-        image: aksretailacr.azurecr.io/emailservice:106f262
+        image: aksretailacr.azurecr.io/emailservice:abaddb6
         ports:
         - containerPort: 8080
         env:
@@ -591,7 +591,7 @@ spec:
               - ALL
           privileged: false
           readOnlyRootFilesystem: true
-        image: aksretailacr.azurecr.io/paymentservice:106f262
+        image: aksretailacr.azurecr.io/paymentservice:abaddb6
         ports:
         - containerPort: 50051
         env:
@@ -751,7 +751,7 @@ spec:
               - ALL
           privileged: false
           readOnlyRootFilesystem: true
-        image: aksretailacr.azurecr.io/recommendationservice:106f262
+        image: aksretailacr.azurecr.io/recommendationservice:abaddb6
         ports:
         - containerPort: 8080
         readinessProbe:
@@ -823,7 +823,7 @@ spec:
               - ALL
           privileged: false
           readOnlyRootFilesystem: true
-        image: aksretailacr.azurecr.io/adservice:106f262
+        image: aksretailacr.azurecr.io/adservice:abaddb6
         ports:
         - containerPort: 9555
         env:
@@ -895,7 +895,7 @@ metadata:
 #               - ALL
 #           privileged: false
 #           readOnlyRootFilesystem: true
-#         image: aksretailacr.azurecr.io/shoppingassistantservice:106f262
+#         image: aksretailacr.azurecr.io/shoppingassistantservice:abaddb6
 #         ports:
 #         - containerPort: 80
 #         readinessProbe:
