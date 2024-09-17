@@ -8,7 +8,7 @@ on:
   
 permissions:
   id-token: write
-  contents: read
+  contents: write
 
 env:
   AZURE_REGION: 'uksouth'
@@ -90,12 +90,12 @@ jobs:
 
       - name: Commit and push updated YAML files
         run: |
-          git config user.email github-actions@github.com
-          git config user.name github-actions
+          git config --local user.email "actions@github.com"
+          git config --local user.name "GitHub Actions"
           git add release/*.yaml
           git commit -m "Updated image tags for $(basename ${{ matrix.service }}) to ${{ env.VERSION_TAG }}"
-          git push https://x-access-token:${{ secrets.GH_PAT }}@github.com/kwabenasarfo1/microservices-demo.git HEAD:dev-new # Replace with your target remote branch
-      
+          git push https://x-access-token:${{ secrets.GH_PAT }}@github.com/kwabenasarfo1/microservices-demo.git HEAD:dev-new
+
       - name: Azure CLI logout
         run: |
           az logout
