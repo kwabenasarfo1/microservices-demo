@@ -751,7 +751,7 @@ spec:
               - ALL
           privileged: false
           readOnlyRootFilesystem: true
-        image: aksretailacr.azurecr.io/recommendationservice:99e18ad
+        image: aksretailacr.azurecr.io/recommendationservice:106f262
         ports:
         - containerPort: 8080
         readinessProbe:
